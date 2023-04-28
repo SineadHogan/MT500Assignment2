@@ -1,0 +1,127 @@
+---
+title: "An Investigation of Intimate Partner Violence"
+
+format: html
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+***MT5000 Data Analytics & Visualisation Assignment 2***
+
+
+
+
+```{r}
+#| label: setup
+#| include: false
+
+library (tidyverse)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(maps)
+
+Pivot_table8 <- read.csv("/cloud/project/Pivot_table8.csv")
+
+Unicef_Data <- read.csv("/cloud/project/Unicef_Data.csv")
+
+# data
+Indicator <- read.csv("/cloud/project/unicef_indicator_1.csv")
+```
+
+The data used to generate this report was gathered by Unicef. The proportion of ever-partnered women and girls aged 15 years and older, subjected to physical, sexual or psychological violence, by a current or former intimate partner in the previous 12 months, is an indicator of the United Nations (UN) sustainable development goal 5.2: Eliminate all forms of violence against all women and girls in the public and private spheres.
+
+```{r}
+library(ggplot2)
+
+map_data <- map_data("world")
+view(map_data)
+map_data <- left_join(map_data, Pivot_table8, by="region")
+view(map_data)
+
+light_blue_color <- "#87d4ed"
+dark_blue_color <- "#0000fa"
+
+map3 <- ggplot(map_data, aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = obs_value), colour = 'black') +
+  scale_fill_gradient(low = light_blue_color, high = dark_blue_color) +
+  theme(
+    axis.text.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.ticks.y = element_blank(),
+    rect = element_blank(),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank()
+  ) +
+  xlab('') +
+  ylab('')
+map3
+```
+*Figure 1: Prevalence of Abuse per Country*
+
+Figure 1 displays the prevalence of domestic abuse among the countries included in the data set. 
+
+- The highest prevalence of abuse is observed in Papua New Guinea. 
+
+- The lowest rate of domestic abuse is observed in Armenia. 
+
+```{r}
+ Unicef_Data %>%
+  ggplot(aes(Prevalence_of_Abuse, Life_expectancy)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+*Figure 2: Life Expectancy versus prevalence of abuse*
+
+Figure 2 displays a moderate negative relationship between the rate of domestic abuse in a country and its life expectancy. This demonstrates the negative effects of violence against women on the health of the population. 
+
+```{r}
+ Unicef_Data%>%
+  ggplot(aes(Prevalence_of_Abuse, GDP)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+*Figure 3: Life Expectancy versus prevalence of abuse*
+
+Figure 3 demonstrates a moderate negative relationship between the rate of domestic abuse in a country and its Gross Domestic Product (GDP). This demonstrates the negative effects of violence against women has on a countries economy. This therefore, supports the research reporting that the missed work of female victims of domestic abuse, translates to lost productivity for businesses and the overall economy (WHO, 2018). 
+
+```{r}
+Unicef_Data%>%
+  ggplot(aes(Year,`Prevalence_of_Abuse`))+
+  geom_line()
+```
+*Figure 4: Prevalence of Abuse recorded per Year*
+
+Figure 4 These values represent the years in which data was recorded and the degree of abuse recorded during each.
+
+```{r}
+
+library(ggplot2)
+
+ggplot(Unicef_Data, aes(x = Year, y = Prevalence_of_Abuse)) +
+  geom_bar(stat = "identity")
+
+```
+*Figure 5: Prevalence of Abuse recorded per Year*
+
+Figure 5 demonstrates an apparent increase in the observed value of domestic abuse over time. There is a marked decrease in levels of recorded abuse demonstrated in 2013, before rising significantly in 2014.   
+
+This report has demonstrated an associated between a countries rate of domestic abuse and both life expectancy and GDP. The findings of this analysis position the achievement of the UN SDG 5: Achieve gender equality and empower all women and girls, as of both social and economic importance. 
+
+
+
+
+**By:** *Sinead Hogan* (*22265954*)
+
+**Due Date:** *30th of April 2023*
+
+**References**
+
+*WHO (2018) Violence Against Women Prevalence Estimates, 2018*
+
+![Figure 6: Unicef Logo.png](Figure 6: Unicef Logo.png)  
+
